@@ -31,9 +31,8 @@ void renderFood(SDL_Renderer* renderer, SDL_Rect food) {
     SDL_RenderFillRect(renderer, &food);
 }
 
-void renderScore(SDL_Renderer* renderer, int tailLength, int scale, int wScale) {
-    // Dummy function since SDL_ttf is not included
-    // You can replace this function with your custom rendering logic if needed
+void renderScore(int tailLength) {
+    printf("Score: %d\n", tailLength);
 }
 
 bool checkCollision(int foodx, int foody, int playerx, int playery) {
@@ -56,6 +55,10 @@ pair<int, int> getFoodSpawn(vector<int> tailX, vector<int> tailY, int playerX, i
         }
     }
     
+    if((x == 72 && y == 72)||(x == 96 && y == 72)||(x == 120 && y == 72)||(x == 144 && y == 72)||(x == 72 && y == 96)||(x == 72 && y == 120)||(x == 72 && y == 144)||(x == 480 && y == 72)||(x == 456 && y == 72)||(x == 432 && y == 72)||(x == 408 && y == 72)||(x == 480 && y == 96)||(x == 480 && y == 120)||(x == 480 && y == 144)||(x == 72 && y == 480)||(x == 96 && y == 480)||(x == 120 && y == 480)||(x == 144 && y == 480)||(x == 72 && y == 456)||(x == 72 && y == 432)||(x == 72 && y == 408)||(x == 480 && y == 480)||(x == 456 && y == 480)||(x == 432 && y == 480)||(x == 408 && y == 480)||(x == 480 && y == 456)||(x == 480 && y == 432)||(x == 480 && y == 408))
+    {
+        valid=false;
+    }
 
     if (!valid) {
         pair<int, int> foodLoc;
@@ -69,32 +72,22 @@ pair<int, int> getFoodSpawn(vector<int> tailX, vector<int> tailY, int playerX, i
     return foodLoc;
 }
 
-void gameOver(SDL_Renderer* renderer, SDL_Event event, int scale, int wScale, int tailLength) {
-    // Dummy function since SDL_ttf is not included
-    // You can replace this function with your custom rendering logic if needed
-}
-
-void youWin(SDL_Renderer* renderer, SDL_Event event, int scale, int wScale, int tailLength) {
-    // Dummy function since SDL_ttf is not included
-    // You can replace this function with your custom rendering logic if needed
-}
-
 int main(int argc, char* argv[]) {
-    // Init everything so we have everything
+    // Init everything
     SDL_Init(SDL_INIT_EVERYTHING);
 
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_Event event;
 
-    // This is the player rectangle, set all values to 0
+    //Player rectangle, set all values to 0
     SDL_Rect player;
     player.x = 0;
     player.y = 0;
     player.h = 0;
     player.w = 0;
 
-    // tailLength is incremented every time the snake eats food
+    // tailLength is incremented if the snake eats food
     int tailLength = 0;
 
     // Vectors for storage of tail block positions
@@ -131,42 +124,19 @@ int main(int argc, char* argv[]) {
     food.x = foodLoc.first;
     food.y = foodLoc.second;
 
-    // Show the window with these settings and apply a renderer to it
+    // Show the window
     window = SDL_CreateWindow("Nagin", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, scale * wScale + 1, scale * wScale + 1, SDL_WINDOW_RESIZABLE);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     float time = SDL_GetTicks() / 100;
 
-    // Main game loop, this constantly runs and keeps everything updated
+    // Game loop
     while (true) {
-        float newTime = SDL_GetTicks() / 100; // This value (100) is the speed at which the blocks are updated
+        float newTime = SDL_GetTicks() / 100; 
         float delta = newTime - time;
         time = newTime;
 
         inputThisFrame = false;
-
-        // Check win condition, tail needs to fill all tiles
-        if (tailLength >= 575) {
-            youWin(renderer, event, scale, wScale, tailLength);
-            x = 0;
-            y = 0;
-            up = false;
-            left = false;
-            right = false;
-            down = false;
-            tailX.clear();
-            tailY.clear();
-            tailLength = 0;
-            redo = false;
-            foodLoc = getFoodSpawn(tailX, tailY, x, y, scale, wScale, tailLength);
-
-            if (food.x == -100 && food.y == -100) {
-                redo = true;
-            }
-
-            food.x = foodLoc.first;
-            food.y = foodLoc.second;
-        }
 
         // Controls
         if (SDL_PollEvent(&event)) {
@@ -177,7 +147,6 @@ int main(int argc, char* argv[]) {
 
             // If a key is pressed
             if (event.type == SDL_KEYDOWN && inputThisFrame == false) {
-                // Then check for the key being pressed and change direction accordingly
                 if (down == false && event.key.keysym.scancode == SDL_SCANCODE_UP) {
                     up = true;
                     left = false;
@@ -206,7 +175,7 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // The previous position of the player block
+        //previous position of the player block
         prevX = x;
         prevY = y;
 
@@ -231,9 +200,9 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // Collision detection, has played collided with food?
+        // Collision detection with food
         if (checkCollision(food.x, food.y, x, y)) {
-            // Spawn new food after it has been eaten
+            // Spawn new food
             foodLoc = getFoodSpawn(tailX, tailY, x, y, scale, wScale, tailLength);
             food.x = foodLoc.first;
             food.y = foodLoc.second;
@@ -268,10 +237,9 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // Game over if player has collided with a tail block, also reset everything
+        //if player has collided with a tail block, game over
         for (int i = 0; i < tailLength; i++) {
             if (x == tailX[i] && y == tailY[i]) {
-                gameOver(renderer, event, scale, wScale, tailLength);
                 x = 0;
                 y = 0;
                 up = false;
@@ -293,9 +261,8 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // Game over if player out of bounds, also resets the game state
-        if (x < 0 || y < 0 || x > scale * wScale - scale || y > scale * wScale - scale||(x == 72 && y == 72)||(x == 96 && y == 72)||(x == 120 && y == 72)||(x == 144 && y == 72)||(x == 72 && y == 96)||(x == 72 && y == 120)||(x == 72 && y == 144)||(x == 480 && y == 72)||(x == 456 && y == 72)||(x == 432 && y == 72)||(x == 408 && y == 72)||(x == 480 && y == 96)||(x == 480 && y == 120)||(x == 480 && y == 144)||(x == 72 && y == 480)||(x == 96 && y == 480)||(x == 120 && y == 480)||(x == 144 && y == 480)||(x == 72 && y == 456)||(x == 72 && y == 432)||(x == 72 && y == 408)||(x == 480 && y == 480)||(x == 456 && y == 480)||(x == 432 && y == 480)||(x == 408 && y == 480)||(x == 480 && y == 456)||(x == 480 && y == 432)||(x == 480 && y == 408)) {
-            gameOver(renderer, event, scale, wScale, tailLength);
+        // Game over if player out of bounds or collide with the walls
+        if (x < 0 || y < 0 || x > scale * wScale - scale || y > scale * wScale - scale||(x == 72 && y == 72)||(x == 96 && y == 72)||(x == 120 && y == 72)||(x == 144 && y == 72)||(x == 72 && y == 96)||(x == 72 && y == 120)||(x == 72 && y == 144)||(x == 480 && y == 72)||(x == 456 && y == 72)||(x == 432 && y == 72)||(x == 408 && y == 72)||(x == 480 && y == 96)||(x == 480 && y == 120)||(x == 480 && y == 144)||(x == 72 && y == 480)||(x == 96 && y == 480)||(x == 120 && y == 480)||(x == 144 && y == 480)||(x == 72 && y == 456)||(x == 72 && y == 432)||(x == 72 && y == 408)||(x == 480 && y == 480)||(x == 456 && y == 480)||(x == 432 && y == 480)||(x == 408 && y == 480)||(x == 480 && y == 456)||(x == 480 && y == 432)||(x == 480 && y == 408)) {         
             x = 0;
             y = 0;
             up = false;
@@ -315,9 +282,8 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // Render everything
-
-        // Render the red block
+        // Render the red blocks for showing walls
+        //wall 1
         SDL_Rect redBlock;
         redBlock.w = scale;
         redBlock.h = scale;
@@ -370,7 +336,7 @@ int main(int argc, char* argv[]) {
         
 
 
-
+        //wall 2
         redBlock.w = scale;
         redBlock.h = scale;
         redBlock.x = 480;
@@ -422,7 +388,7 @@ int main(int argc, char* argv[]) {
 
 
 
-
+        //wall 3
         redBlock.w = scale;
         redBlock.h = scale;
         redBlock.x = 72;
@@ -474,7 +440,7 @@ int main(int argc, char* argv[]) {
 
 
 
-
+        //wall 4
         redBlock.w = scale;
         redBlock.h = scale;
         redBlock.x = 480;
@@ -531,7 +497,7 @@ int main(int argc, char* argv[]) {
         // Render food, player, score, and window border
         renderFood(renderer, food);
         renderPlayer(renderer, player, x, y, scale, tailX, tailY, tailLength);
-        renderScore(renderer, tailLength, scale, wScale);
+        renderScore(tailLength);
 
         SDL_RenderDrawLine(renderer, 0, 0, 0, 24 * 24);
         SDL_RenderDrawLine(renderer, 0, 24 * 24, 24 * 24, 24 * 24);
@@ -541,7 +507,7 @@ int main(int argc, char* argv[]) {
         // Put everything on screen
         SDL_RenderPresent(renderer);
 
-        // Choose a color and fill the entire window with it, this resets everything before the next frame
+        // Choose a color to fill the window
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
     }
