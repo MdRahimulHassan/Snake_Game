@@ -123,7 +123,7 @@ int main(int argc, char* argv[]) {
     food.y = foodLoc.second;
 
     // Show the window
-    window = SDL_CreateWindow("Nagin", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, scale * wScale + 1, scale * wScale + 1, SDL_WINDOW_RESIZABLE);
+    window = SDL_CreateWindow("Nagin", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, scale * wScale , scale * wScale , SDL_WINDOW_RESIZABLE);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     float time = SDL_GetTicks() / 100;
@@ -235,7 +235,7 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        //if player has collided with a tail block, game over
+        //if snake has collided with a tail block, game over
         for (int i = 0; i < tailLength; i++) {
             if (x == tailX[i] && y == tailY[i]) {
                 x = 0;
@@ -259,8 +259,24 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // Game over if player out of bounds or collide with the walls
-        if (x < 0 || y < 0 || x > scale * wScale - scale || y > scale * wScale - scale||(x == 72 && y == 72)||(x == 96 && y == 72)||(x == 120 && y == 72)||(x == 144 && y == 72)||(x == 72 && y == 96)||(x == 72 && y == 120)||(x == 72 && y == 144)||(x == 480 && y == 72)||(x == 456 && y == 72)||(x == 432 && y == 72)||(x == 408 && y == 72)||(x == 480 && y == 96)||(x == 480 && y == 120)||(x == 480 && y == 144)||(x == 72 && y == 480)||(x == 96 && y == 480)||(x == 120 && y == 480)||(x == 144 && y == 480)||(x == 72 && y == 456)||(x == 72 && y == 432)||(x == 72 && y == 408)||(x == 480 && y == 480)||(x == 456 && y == 480)||(x == 432 && y == 480)||(x == 408 && y == 480)||(x == 480 && y == 456)||(x == 480 && y == 432)||(x == 480 && y == 408)) {         
+        if(x>scale*wScale-scale)
+        {
+            x=0;
+        }
+        if(y>scale*wScale-scale)
+        {
+            y=0;
+        }
+        if(x<0)
+        {
+            x=scale*wScale-scale;
+        }
+        if(y<0)
+        {
+            y=scale*wScale-scale;
+        }
+        // Game over if snake collide with the walls
+        if ((x == 72 && y == 72)||(x == 96 && y == 72)||(x == 120 && y == 72)||(x == 144 && y == 72)||(x == 72 && y == 96)||(x == 72 && y == 120)||(x == 72 && y == 144)||(x == 480 && y == 72)||(x == 456 && y == 72)||(x == 432 && y == 72)||(x == 408 && y == 72)||(x == 480 && y == 96)||(x == 480 && y == 120)||(x == 480 && y == 144)||(x == 72 && y == 480)||(x == 96 && y == 480)||(x == 120 && y == 480)||(x == 144 && y == 480)||(x == 72 && y == 456)||(x == 72 && y == 432)||(x == 72 && y == 408)||(x == 480 && y == 480)||(x == 456 && y == 480)||(x == 432 && y == 480)||(x == 408 && y == 480)||(x == 480 && y == 456)||(x == 480 && y == 432)||(x == 480 && y == 408)) {         
             x = 0;
             y = 0;
             up = false;
