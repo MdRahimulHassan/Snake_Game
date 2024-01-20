@@ -1,16 +1,1 @@
-// Render food, player, score, and window border
-        renderFood(renderer, food);
-        renderPlayer(renderer, player, x, y, scale, tailX, tailY, tailLength);
-        renderScore(tailLength);
-
-        SDL_RenderDrawLine(renderer, 0, 0, 0, 24 * 24);
-        SDL_RenderDrawLine(renderer, 0, 24 * 24, 24 * 24, 24 * 24);
-        SDL_RenderDrawLine(renderer, 24 * 24, 24 * 24, 24 * 24, 0);
-        SDL_RenderDrawLine(renderer, 24 * 24, 0, 0, 0);
-
-        // Put everything on screen
-        SDL_RenderPresent(renderer);
-
-        // Choose a color to fill the window
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
+(x == 96 && y == 72)||(x == 120 && y == 72)||(x == 144 && y == 72)||(x == 72 && y == 96)||(x == 72 && y == 120)||(x == 72 && y == 144)||(x == 480 && y == 72)||(x == 456 && y == 72)||(x == 432 && y == 72)||(x == 408 && y == 72)||(x == 480 && y == 96)||(x == 480 && y == 120)||(x == 480 && y == 144)||(x == 72 && y == 480)||(x == 96 && y == 480)||(x == 120 && y == 480)||(x == 144 && y == 480)||(x == 72 && y == 456)||(x == 72 && y == 432)||(x == 72 && y == 408)||(x == 480 && y == 480)||(x == 456 && y == 480)||(x == 432 && y == 480)||(x == 408 && y == 480)||(x == 480 && y == 456)||(x == 480 && y == 432)||(x == 480 && y == 408)

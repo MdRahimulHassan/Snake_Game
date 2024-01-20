@@ -3,9 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "inc/SDL.h"
-
 #undef main
-
 using namespace std;
 
 void renderPlayer(SDL_Renderer* renderer, SDL_Rect player, int x, int y, int scale, vector<int> tailX, vector<int> tailY, int tailLength) {
@@ -80,7 +78,7 @@ int main(int argc, char* argv[]) {
     SDL_Renderer* renderer;
     SDL_Event event;
 
-    //Player rectangle, set all values to 0
+    //Player rectangle
     SDL_Rect player;
     player.x = 0;
     player.y = 0;
@@ -282,217 +280,68 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // Render the red blocks for showing walls
+        //red blocks for showing walls
         //wall 1
         SDL_Rect redBlock;
-        redBlock.w = scale;
-        redBlock.h = scale;
+        redBlock.w = 96;
+        redBlock.h = 24;
         redBlock.x = 72;
         redBlock.y = 72;
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
         SDL_RenderFillRect(renderer, &redBlock);
 
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 96;
-        redBlock.y = 72;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 120;
-        redBlock.y = 72;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 144;
-        redBlock.y = 72;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
+        redBlock.w = 24;
+        redBlock.h = 72;
         redBlock.x = 72;
         redBlock.y = 96;
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
         SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 72;
-        redBlock.y = 120;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 72;
-        redBlock.y = 144;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-        
-
 
         //wall 2
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 480;
-        redBlock.y = 72;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-        
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 456;
-        redBlock.y = 72;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 432;
-        redBlock.y = 72;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
+        redBlock.w = 96;
+        redBlock.h = 24;
         redBlock.x = 408;
         redBlock.y = 72;
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
         SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
+        
+        redBlock.w = 24;
+        redBlock.h = 72;
         redBlock.x = 480;
         redBlock.y = 96;
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
         SDL_RenderFillRect(renderer, &redBlock);
 
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 480;
-        redBlock.y = 120;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 480;
-        redBlock.y = 144;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-
-
-
         //wall 3
-        redBlock.w = scale;
-        redBlock.h = scale;
+        redBlock.w = 96;
+        redBlock.h = 24;
         redBlock.x = 72;
         redBlock.y = 480;
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_RenderFillRect(renderer, &redBlock);
 
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 96;
-        redBlock.y = 480;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 120;
-        redBlock.y = 480;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 144;
-        redBlock.y = 480;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 72;
-        redBlock.y = 456;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 72;
-        redBlock.y = 432;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
+        redBlock.w = 24;
+        redBlock.h = 72;
         redBlock.x = 72;
         redBlock.y = 408;
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_RenderFillRect(renderer, &redBlock);
 
-
-
+        
         //wall 4
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 480;
-        redBlock.y = 480;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 456;
-        redBlock.y = 480;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 432;
-        redBlock.y = 480;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
+        redBlock.w = 96;
+        redBlock.h = 24;
         redBlock.x = 408;
         redBlock.y = 480;
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
         SDL_RenderFillRect(renderer, &redBlock);
 
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 480;
-        redBlock.y = 456;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
-        redBlock.x = 480;
-        redBlock.y = 432;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
-        SDL_RenderFillRect(renderer, &redBlock);
-
-        redBlock.w = scale;
-        redBlock.h = scale;
+        redBlock.w = 24;
+        redBlock.h = 72;
         redBlock.x = 480;
         redBlock.y = 408;
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
         SDL_RenderFillRect(renderer, &redBlock);
-
-
-
-
 
         // Render food, player, score, and window border
         renderFood(renderer, food);
@@ -511,7 +360,6 @@ int main(int argc, char* argv[]) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
     }
-
     SDL_DestroyWindow(window);
     SDL_Quit();
 
