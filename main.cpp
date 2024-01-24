@@ -4,8 +4,34 @@
 #include <ctime>
 #include "inc/SDL.h"
 #include "inc/SDL_ttf.h"
+#include "inc/SDL_mixer.h"
+#include "inc/SDL_image.h"
 #undef main
+// SDL_Renderer* renderer;
+Mix_Music* bgm;
 using namespace std;
+void startscreen(SDL_Renderer* renderer)
+{
+    IMG_Init(IMG_INIT_JPG);
+    SDL_RenderClear(renderer);
+    SDL_Surface* imgS = IMG_Load("game start.jpg");
+    if(imgS == NULL) cout << SDL_GetError() << endl;
+    SDL_Texture* imgTex = SDL_CreateTextureFromSurface(renderer, imgS);
+    if(imgTex == NULL) cout << SDL_GetError() << endl;
+    SDL_RenderCopy(renderer, imgTex, NULL, NULL);
+    SDL_RenderPresent(renderer);
+}
+/*void overscreen(SDL_Renderer* renderer)
+{
+    IMG_Init(IMG_INIT_JPG);
+    SDL_RenderClear(renderer);
+    SDL_Surface* imgS = IMG_Load("game over.jpg");
+    if(imgS == NULL) cout << SDL_GetError() << endl;
+    SDL_Texture* imgTex = SDL_CreateTextureFromSurface(renderer, imgS);
+    if(imgTex == NULL) cout << SDL_GetError() << endl;
+    SDL_RenderCopy(renderer, imgTex, NULL, NULL);
+    SDL_RenderPresent(renderer);
+}*/
 
 void renderPlayer(SDL_Renderer* renderer, SDL_Rect player, int x, int y, int scale, vector<int> tailX, vector<int> tailY, int tailLength) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
@@ -31,16 +57,16 @@ void renderFood(SDL_Renderer* renderer, SDL_Rect food) {
 }
 
 void renderScore(SDL_Renderer* renderer, int tailLength, int scale, int wScale) {
-    SDL_Color Black = { 255, 255, 255 };
+    SDL_Color White = { 255, 255, 255 };
 
     // Get the font used for displaying text
-    TTF_Font* font = TTF_OpenFont("arial.ttf", 10);
+    TTF_Font* font = TTF_OpenFont("OpenSans-SemiboldItalic.ttf", 10);
     if (font == NULL) {
         cout << "Font loading error: " << TTF_GetError() << endl;
         return;
     }
 
-    SDL_Surface* score = TTF_RenderText_Solid(font, (string("Score: ") + to_string(tailLength * 10)).c_str(), Black);
+    SDL_Surface* score = TTF_RenderText_Solid(font, (string("Score: ") + to_string(tailLength * 1)).c_str(), White);
     SDL_Texture* scoreMessage = SDL_CreateTextureFromSurface(renderer, score);
     SDL_Rect scoreRect;
     scoreRect.w = 100;
@@ -108,10 +134,12 @@ void gameOver(SDL_Renderer* renderer, SDL_Event event, int scale, int wScale, in
         cout << "Font loading error: " << TTF_GetError() << endl;
         return;
     }
+    /*overscreen(renderer);
+    SDL_Delay(5000);*/
 
     SDL_Surface* gameover = TTF_RenderText_Solid(font, "Game Over", Red);
     SDL_Surface* retry = TTF_RenderText_Solid(font, "Press Enter to retry", White);
-    SDL_Surface* score = TTF_RenderText_Solid(font, (string("Score: ") + to_string(tailLength * 10)).c_str(), Black);
+    SDL_Surface* score = TTF_RenderText_Solid(font, (string("Score: ") + to_string(tailLength * 1)).c_str(), Black);
     SDL_Texture* gameoverMessage = SDL_CreateTextureFromSurface(renderer, gameover);
     SDL_Texture* retryMessage = SDL_CreateTextureFromSurface(renderer, retry);
     SDL_Texture* scoreMessage = SDL_CreateTextureFromSurface(renderer, score);
@@ -172,6 +200,11 @@ int main(int argc, char* argv[]) {
     SDL_Renderer* renderer;
     SDL_Event event;
 
+    Mix_Init(MIX_INIT_MP3);
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 1, 1024);
+    bgm = Mix_LoadMUS("heda.mp3");
+    Mix_PlayMusic(bgm, -1);
+
     //Player rectangle
     SDL_Rect player;
     player.x = 0;
@@ -217,8 +250,11 @@ int main(int argc, char* argv[]) {
     food.y = foodLoc.second;
 
     // Show the window
-    window = SDL_CreateWindow("Nagin", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, scale * wScale , scale * wScale , SDL_WINDOW_RESIZABLE);
+    window = SDL_CreateWindow("RUSSIAN NAGIN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, scale * wScale , scale * wScale , SDL_WINDOW_RESIZABLE);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    startscreen(renderer);
+    SDL_Delay(4000);
 
     float time = SDL_GetTicks() / 100;
 
@@ -477,7 +513,7 @@ int main(int argc, char* argv[]) {
         SDL_RenderPresent(renderer);
 
         // Choose a color to fill the window
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
         SDL_RenderClear(renderer);
     }
     SDL_DestroyWindow(window);
