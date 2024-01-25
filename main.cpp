@@ -34,21 +34,36 @@ void startscreen(SDL_Renderer* renderer)
 }*/
 
 void renderPlayer(SDL_Renderer* renderer, SDL_Rect player, int x, int y, int scale, vector<int> tailX, vector<int> tailY, int tailLength) {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    
     player.w = scale;
     player.h = scale;
-
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+       // SDL_RenderFillRect(renderer, &player);
     // Gets x and y of all tail blocks and renders them
     for (int i = 0; i < tailLength; i++) {
-        player.x = tailX[i];
-        player.y = tailY[i];
-        SDL_RenderFillRect(renderer, &player);
+        if(i==tailLength-1)
+        {
+            SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+            player.x = tailX[i];
+            player.y = tailY[i];
+            SDL_RenderFillRect(renderer, &player);
+        }
+        else
+        {
+            SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+            player.x = tailX[i];
+            player.y = tailY[i];
+            SDL_RenderFillRect(renderer, &player);
+        }
+        
     }
 
     player.x = x;
     player.y = y;
-
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderFillRect(renderer, &player);
+
+    
 }
 
 void renderFood(SDL_Renderer* renderer, SDL_Rect food) {
@@ -342,7 +357,7 @@ int main(int argc, char* argv[]) {
             tailLength++;
         }
 
-        // Only runs in the frames where the player block has moved
+        // Only runs in the frames
         if (delta * scale == 24) {
             // Update tail size and position
             if (tailX.size() != tailLength) {
@@ -454,8 +469,7 @@ int main(int argc, char* argv[]) {
         redBlock.w = 24;
         redBlock.h = 72;
         redBlock.x = 72;
-        redBlock.y = 96;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
+        redBlock.y = 96; 
         SDL_RenderFillRect(renderer, &redBlock);
 
         //wall 2
@@ -463,14 +477,12 @@ int main(int argc, char* argv[]) {
         redBlock.h = 24;
         redBlock.x = 408;
         redBlock.y = 72;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
         SDL_RenderFillRect(renderer, &redBlock);
         
         redBlock.w = 24;
         redBlock.h = 72;
         redBlock.x = 480;
         redBlock.y = 96;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
         SDL_RenderFillRect(renderer, &redBlock);
 
         //wall 3
@@ -478,14 +490,12 @@ int main(int argc, char* argv[]) {
         redBlock.h = 24;
         redBlock.x = 72;
         redBlock.y = 480;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_RenderFillRect(renderer, &redBlock);
 
         redBlock.w = 24;
         redBlock.h = 72;
         redBlock.x = 72;
         redBlock.y = 408;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_RenderFillRect(renderer, &redBlock);
 
         
@@ -493,15 +503,13 @@ int main(int argc, char* argv[]) {
         redBlock.w = 96;
         redBlock.h = 24;
         redBlock.x = 408;
-        redBlock.y = 480;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
+        redBlock.y = 480; 
         SDL_RenderFillRect(renderer, &redBlock);
 
         redBlock.w = 24;
         redBlock.h = 72;
         redBlock.x = 480;
-        redBlock.y = 408;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
+        redBlock.y = 408; 
         SDL_RenderFillRect(renderer, &redBlock);
 
         // Render food, player, score, and window border
