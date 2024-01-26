@@ -10,7 +10,6 @@
 // SDL_Renderer* renderer;
 Mix_Music* bgm;
 using namespace std;
-
 void startscreen(SDL_Renderer* renderer)
 {
     IMG_Init(IMG_INIT_JPG);
@@ -38,7 +37,7 @@ void renderPlayer(SDL_Renderer* renderer, SDL_Rect player, int x, int y, int sca
     
     player.w = scale;
     player.h = scale;
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    //SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
        // SDL_RenderFillRect(renderer, &player);
     // Gets x and y of all tail blocks and renders them
     for (int i = 0; i < tailLength; i++) {
@@ -51,9 +50,10 @@ void renderPlayer(SDL_Renderer* renderer, SDL_Rect player, int x, int y, int sca
         }
         else
         {
-            SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+            
             player.x = tailX[i];
             player.y = tailY[i];
+            SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
             SDL_RenderFillRect(renderer, &player);
         }
         
@@ -72,9 +72,9 @@ void renderFood(SDL_Renderer* renderer, SDL_Rect food) {
     SDL_RenderFillRect(renderer, &food);
 }
 
-void renderB(SDL_Renderer* renderer, SDL_Rect b) {
+void renderbonus(SDL_Renderer* renderer, SDL_Rect food) {
     SDL_SetRenderDrawColor(renderer, 0, 25, 200, 255);
-    SDL_RenderFillRect(renderer, &b);
+    SDL_RenderFillRect(renderer, &food);
 }
 
 void renderScore(SDL_Renderer* renderer, int tailLength, int scale, int wScale) {
@@ -144,19 +144,19 @@ pair<int, int> getFoodSpawn(vector<int> tailX, vector<int> tailY, int playerX, i
     return foodLoc;
 }
 
-pair<int, int> bSpawn(vector<int> tailX, vector<int> tailY, int playerX, int playerY, int scale, int wScale, int tailLength) {
-    bool bvalid = false;
+pair<int, int> getbonusSpawn(vector<int> tailX, vector<int> tailY, int playerX, int playerY, int scale, int wScale, int tailLength) {
+    bool valid = false;
     int x = 0;
     int y = 0;
     srand(time(0));
     x = scale * (rand() % wScale);
     y = scale * (rand() % wScale);
-    bvalid = true;
+    valid = true;
 
     // Check all tail blocks and player block
     for (int i = 0; i < tailLength; i++) {
         if ((x == tailX[i] && y == tailY[i])||(x == playerX && y == playerY)) {
-            bvalid = false;
+            valid = false;
         }
     }
 
@@ -170,18 +170,19 @@ pair<int, int> bSpawn(vector<int> tailX, vector<int> tailY, int playerX, int pla
     (x == 480 && y == 480)||(x == 456 && y == 480)||(x == 432 && y == 480)||
     (x == 408 && y == 480)||(x == 480 && y == 456)||(x == 480 && y == 432)||(x == 480 && y == 408))
     {
-        bvalid=false;
-    }
-    pair<int, int> bLoc;
-    if (!bvalid) {
-        bLoc = make_pair(-100, -100);
-        return bLoc;
+        valid=false;
     }
 
-    //pair<int, int> foodLoc;
-    bLoc = make_pair(x, y);
+    if (!valid) {
+        pair<int, int> bonusLoc;
+        bonusLoc = make_pair(-100, -100);
+        return bonusLoc;
+    }
 
-    return bLoc;
+    pair<int, int> bonusLoc;
+    bonusLoc = make_pair(x, y);
+
+    return bonusLoc;
 }
 
 void gameOver(SDL_Renderer* renderer, SDL_Event event, int scale, int wScale, int tailLength) {
@@ -266,8 +267,6 @@ int main(int argc, char* argv[]) {
     bgm = Mix_LoadMUS("heda.mp3");
     Mix_PlayMusic(bgm, -1);
 
-    int fCount=0;
-
     //Player rectangle
     SDL_Rect player;
     player.x = 0;
@@ -309,24 +308,29 @@ int main(int argc, char* argv[]) {
     food.x = 0;
     food.y = 0;
 
-    SDL_Rect b;
-    b.w = scale;
-    b.h = scale;
-    b.x = -20;
-    b.y = -20;
+    SDL_Rect bonus;
+    bonus.w = scale;
+    bonus.h = scale;
+    bonus.x = -50;
+    bonus.y = -50;
+    int bonuscounter =0;
 
     pair<int, int> foodLoc = getFoodSpawn(tailX, tailY, x, y, scale, wScale, tailLength);
     food.x = foodLoc.first;
     food.y = foodLoc.second;
+    pair<int, int> bonusLoc;
+    
 
-    pair<int, int> bLoc;
-
+    
+    foodLoc = getFoodSpawn(tailX, tailY, x, y, scale, wScale, tailLength);
+    food.x = foodLoc.first;
+    food.y = foodLoc.second;
     // Show the window
-    window = SDL_CreateWindow("RUSSIAN NAGIN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, scale * wScale , scale * wScale , SDL_WINDOW_RESIZABLE);
+    window = SDL_CreateWindow("NAGIN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, scale * wScale , scale * wScale , SDL_WINDOW_RESIZABLE);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     startscreen(renderer);
-    SDL_Delay(4000);
+    SDL_Delay(1000);
 
     float time = SDL_GetTicks() / 100;
 
@@ -402,15 +406,15 @@ int main(int argc, char* argv[]) {
 
         if (bredo == true) {
             bredo = false;
-            bLoc = bSpawn(tailX, tailY, x, y, scale, wScale, tailLength);
-            b.x = bLoc.first;
-            b.y = bLoc.second;
+            
+            bonusLoc = getbonusSpawn(tailX, tailY, x, y, scale, wScale, tailLength);
+            bonus.x = bonusLoc.first;
+            bonus.y = bonusLoc.second;
 
-            if (b.x == -100 && b.y == -100) {
+            if (bonus.x == -100 && bonus.y == -100) {
                 bredo = true;
             }
         }
-
 
         // Collision detection with food
         if (checkCollision(food.x, food.y, x, y)) {
@@ -423,32 +427,52 @@ int main(int argc, char* argv[]) {
                 redo = true;
             }
 
+            bonuscounter++;
             tailLength++;
-            fCount++;
+           
+
         }
 
-        if (checkCollision(b.x, b.y, x, y)) {
+        if (bonuscounter == 3) {
+            bonusLoc = getbonusSpawn(tailX, tailY, x, y, scale, wScale, tailLength);
+            bonus.x = bonusLoc.first;
+            bonus.y = bonusLoc.second;
+
+            // Reset bonusCounter
+            bonuscounter = 0;
+        }
+
+if (bonus.x == -100 && bonus.y == -100)
+    bredo = true;
+if (checkCollision(bonus.x, bonus.y, x, y)) {
             // Spawn new food
             //foodLoc = getFoodSpawn(tailX, tailY, x, y, scale, wScale, tailLength);
-            b.x = -20;
-            b.y = -20;
+            //food.x = foodLoc.first;
+            //food.y = foodLoc.second;
+            bonus.x == -10; 
+            bonus.y == -10;
 
+            //////if (bonus.x == -100 && bonus.y == -100) {
+                //redo = true;
+            //}
+
+             //bonuscounter++;
+            //if (bonuscounter == 3) {
+                //pair<int, int> bonusLoc = getbonusSpawn(tailX, tailY, x, y, scale, wScale, tailLength);
+                //bonus.x = bonusLoc.first;
+                //bonus.y = bonusLoc.second;
+
+                // Reset bonusCounter
+                bonuscounter = 0;
+            //}
+            
             tailLength++;
+        
         }
 
-        if (fCount==3){
-            bLoc = getFoodSpawn(tailX, tailY, x, y, scale, wScale, tailLength);
-            b.x = bLoc.first;
-            b.y = bLoc.second;
 
-            if (b.x == -100 && b.y == -100) {
-                bredo = true;
-            }
-            fCount=0;
-        }
+        
 
-        cout << food.x << " " << food.y << endl;
-        cout << b.x << " " << b.y << endl;
 
         // Only runs in the frames
         if (delta * scale == 24) {
@@ -476,7 +500,6 @@ int main(int argc, char* argv[]) {
         //if snake has collided with a tail block, game over
         for (int i = 0; i < tailLength; i++) {
             if (x == tailX[i] && y == tailY[i]) {
-                cout << "collided with a tail block." << endl;
                 gameOver(renderer, event, scale, wScale, tailLength);
                 x = 0;
                 y = 0;
@@ -496,9 +519,6 @@ int main(int argc, char* argv[]) {
 
                 food.x = foodLoc.first;
                 food.y = foodLoc.second;
-
-                b.x = -20;
-                b.y = -20;
             }
         }
 
@@ -533,8 +553,7 @@ int main(int argc, char* argv[]) {
         (x == 456 && y == 480)||(x == 432 && y == 480)||
         (x == 408 && y == 480)||(x == 480 && y == 456)||
         (x == 480 && y == 432)||(x == 480 && y == 408)) {    
-            gameOver(renderer, event, scale, wScale, tailLength);
-            cout << "snake collide with the walls" << endl;
+             gameOver(renderer, event, scale, wScale, tailLength);
             x = 0;
             y = 0;
             up = false;
@@ -548,9 +567,6 @@ int main(int argc, char* argv[]) {
             foodLoc = getFoodSpawn(tailX, tailY, x, y, scale, wScale, tailLength);
             food.x = foodLoc.first;
             food.y = foodLoc.second;
-
-            b.x = -20;
-            b.y = -20;
 
             if (food.x == -100 && food.y == -100) {
                 redo = true;
@@ -615,7 +631,8 @@ int main(int argc, char* argv[]) {
 
         // Render food, player, score, and window border
         renderFood(renderer, food);
-        renderB(renderer, b);
+
+        renderbonus(renderer, bonus);
         renderPlayer(renderer, player, x, y, scale, tailX, tailY, tailLength);
         renderScore(renderer, tailLength, scale, wScale);
 
@@ -631,3 +648,4 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
+
